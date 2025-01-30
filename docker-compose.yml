@@ -1,0 +1,37 @@
+version: '3'
+
+services:
+  app-database:
+    image: postgres:17
+    restart: always  
+    network_mode: host
+    container_name: pg-cnt
+    volumes:
+      - vol-dir:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=test-db
+      - POSTGRES_USER=some-user
+      - POSTGRES_PASSWORD=some-password
+
+  app-backend:
+    build: ./back
+    restart: always
+    network_mode: host  
+    container_name: back-cnt
+    environment:
+      - PGUSER=some-user
+      - PGPASSOWRD=some-password
+      - PGDATABASE=test-db
+      - PGHOST=localhost
+      - PGPORT=5432
+
+  app-frontend:
+    build: ./front
+    restart: always  
+    network_mode: host  
+    container_name: front-cnt
+
+
+
+volumes:
+  vol-dir:  
